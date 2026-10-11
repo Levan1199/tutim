@@ -1,0 +1,36 @@
+/* index.css */
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* components/list/findBar.css */
+.search-wrapper {
+  height: 50px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* components/teacher/teacher.css */
+#grade .search-wrapper {
+  min-height: 75px;
+}
+#subject .search-wrapper {
+  min-height: 75px;
+}
+#district .search-wrapper {
+  min-height: 75px;
+}

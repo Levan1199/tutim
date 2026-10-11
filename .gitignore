@@ -1,0 +1,60 @@
+# Dependencies and generated builds (root and workspaces)
+node_modules/
+dist/
+build/
+.pnp
+.pnp.*
+
+# Local environment settings; keep safe templates in Git
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Tool caches and test output
+.vite/
+.cache/
+.eslintcache
+*.tsbuildinfo
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Runtime logs and Node diagnostic output
+logs/
+*.log
+*.pid
+*.pid.lock
+report.[0-9]*.json
+
+# Local TLS keys and certificates
+*.key
+*.pem
+*.p12
+*.pfx
+*.cert
+*.crt
+*.cer
+
+# Uploaded profile photos are runtime data, not source assets
+/server/public/images/*
+!/server/public/images/.gitkeep
+
+# Course uploads use UUID filenames; retain bundled course artwork
+/server/public/coursesImg/????????-????-????-????-????????????.*
+
+# Local editor, operating-system, and temporary files
+.idea/
+.history/
+.vscode/*.local.json
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+*.tmp
+.tmp/

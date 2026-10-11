@@ -1,0 +1,11 @@
+**/node_modules
+**/.git
+**/dist
+**/.eslintcache
+.env
+**/package-lock.json
+!package-lock.json
+**/.env
+**/private.key
+**/certificate.cert
+test-results
