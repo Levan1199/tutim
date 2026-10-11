@@ -6,7 +6,7 @@ const auth = require("../authenticate");
 const { fail, id, required } = require("./helpers");
 router.use(auth.verifyUser);
 router.get("/", auth.verifyAdmin, async (req, res) =>
-  res.json(await Waiting.find()),
+  res.json(await Waiting.find().populate("teacherId studentId")),
 );
 router.delete("/", auth.verifyAdmin, async (req, res) =>
   res.json(await Waiting.deleteMany()),
@@ -42,4 +42,8 @@ for (const role of ["student", "teacher"]) {
     res.json({ success: true });
   });
 }
+router.delete("/:connectionId", auth.verifyAdmin, async (req, res) => {
+  required(await Waiting.findByIdAndDelete(id(req.params.connectionId)));
+  res.json({ success: true });
+});
 module.exports = router;
