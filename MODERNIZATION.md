@@ -61,7 +61,7 @@ The frontend source now contains exactly seven files rather than the prior 62 so
 | `components/MainComponent.jsx` and `App.jsx` | `App.jsx`: route table, `Protected`, `Navigation` |
 | `components/admin/AdminView.jsx` | `pages.jsx`: `AdminPage` |
 | Student/teacher admin lists | `pages.jsx`: `AdminAccountList`, role-specific wrappers |
-| `HomeComponent`, `Courses`, `Map`, course detail | `pages.jsx`: `HomePage`, `CoursesPage`, `AddressPage`, `CourseDetailPage` |
+| `HomeComponent`, `Courses`, address search, course detail | `pages.jsx`: `HomePage`, `CoursesPage`, `AddressPage`, `CourseDetailPage` |
 | Teacher/student directories | `pages.jsx`: `TeacherDirectory`, `StudentDirectory` |
 | Own and public profile screens | `pages.jsx`: `TeacherProfile`, `StudentProfile`, `PublicTeacherProfile`, `PublicStudentProfile` |
 | Registered teacher/student lists | `pages.jsx`: shared `ConnectionsPage` with role wrappers |
@@ -82,15 +82,11 @@ Profile pages work for visitors without assuming a logged-in student/teacher. Ro
 
 Uploaded images use randomized filenames and validate size, MIME type, and PNG/JPEG/GIF signature. Replacing an image retains the old asset so this refactor cannot remove a shared existing image; unused-image cleanup can be added separately.
 
-## External providers
+## Authentication and TLS cleanup
 
-At the user's request, Google Maps embeds and their embedded API key were removed. The home page displays the center address as text. The navigation now links to `/addresses`, where visitors can search stored student addresses by name, address, or district. Existing `/map` URLs still open this address page. It does not perform geocoding or make map-provider requests.
-
-Facebook sign-in, its SDK loader, token-validation endpoint, legacy public demo page, and provider environment settings were removed. Local username/password login and JWT authentication remain. No installed dependency was specific to Facebook OAuth; Passport packages are retained for local authentication. Existing database records were not migrated or deleted.
+Local username/password login uses Passport and JWT authentication. Existing database records were not migrated or deleted.
 
 Unused TLS certificates and private keys were removed from the frontend's public assets and the backend's `bin` directory. The HTTP development servers did not load them. Ignore rules prevent these filenames from entering future Git changes or Docker builds. This cleanup does not erase earlier Git history or existing source backups.
-
-The application requires no Google or Facebook developer registration. Removing these integrations does not close any existing external developer project or cancel billing on an external account.
 
 ## Validation
 
@@ -98,4 +94,4 @@ Validation uses isolated test databases and temporary upload directories. API te
 
 The dependency audit reported **zero known vulnerabilities** for the installed full dependency tree on October 11, 2026. This describes the audit result at that time; it is not a guarantee about future advisories. Build, test, browser, and integrity results are recorded during the migration.
 
-The earlier dependency modernization validated original collection checksums against its pre-migration snapshot and initialized an empty `waitinglists` collection. Subsequent restructuring and provider removal use isolated databases for API/browser validation and do not write to original account or application records. Checks include lint, production build, 12 API/request/state tests, development and production browser workflows, profile-selector clearing, and npm audit (zero findings). Browser tests assert that there are no Google/Facebook requests, no embedded map iframes, and no Facebook sign-in button. They exercise address search and legacy map URLs. The removed social sign-in endpoint is checked for a 404 response.
+The earlier dependency modernization validated original collection checksums against its pre-migration snapshot and initialized an empty `waitinglists` collection. Subsequent validation uses isolated databases and does not write to original account or application records. Checks include lint, production build, 12 API/request/state tests, development and production browser workflows, profile-selector clearing, address search, and npm audit (zero findings).
