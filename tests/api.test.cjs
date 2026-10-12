@@ -334,4 +334,108 @@ test("v1 workflows retain schema/password compatibility and enforce ownership", 
         .expect(204);
     },
   );
+  await t.test(
+    "modern account actions enforce admin access and explicit disable state",
+    async () => {
+      await api
+        .patch("/admin/accounts/" + studentUser)
+        .set(auth(studentToken))
+        .send({ isDisable: true })
+        .expect(403);
+      await api
+        .patch("/admin/accounts/" + legacy._id)
+        .set(auth(adminToken))
+        .send({ isDisable: true })
+        .expect(403);
+      await api
+        .delete("/admin/accounts/" + legacy._id)
+        .set(auth(adminToken))
+        .expect(403);
+      await api
+        .patch("/admin/accounts/" + studentUser)
+        .set(auth(adminToken))
+        .send({ isDisable: "true" })
+        .expect(400);
+      for (let i = 0; i < 2; i++) {
+        const res = await api
+          .patch("/admin/accounts/" + studentUser)
+          .set(auth(adminToken))
+          .send({ isDisable: true })
+          .expect(200);
+        assert.equal(res.body.isDisable, true);
+      }
+      await api
+        .patch("/admin/accounts/" + studentUser)
+        .set(auth(adminToken))
+        .send({ isDisable: false })
+        .expect(200);
+    },
+  );
+  await t.test(
+    "modern admin can inspect and remove one connection without removing others",
+    async () => {
+      const entry = await Waiting.create({
+        studentId: student._id,
+        teacherId: teacher._id,
+      });
+      const res = await api.get("/awaiting").set(auth(adminToken)).expect(200);
+      assert.ok(
+        res.body.find((item) => item._id === String(entry._id)).teacherId.name,
+      );
+      await api
+        .delete("/awaiting/" + entry._id)
+        .set(auth(studentToken))
+        .expect(403);
+      await api
+        .delete("/awaiting/" + entry._id)
+        .set(auth(adminToken))
+        .expect(200);
+      assert.equal(await Waiting.countDocuments({ _id: entry._id }), 0);
+    },
+  );
+  await t.test(
+    "modern deletion removes the account's profile, reviews and connections",
+    async () => {
+      const Student = require("../server/models/studentReg");
+      const Comments = require("../server/models/comments");
+      const profile = await Student.create({ name: "Disposable account" });
+      const account = await User.register(
+        new User({
+          username: "delete-me",
+          isStudent: true,
+          studentProfile: profile._id,
+        }),
+        "test-password",
+      );
+      await Waiting.create({ teacherId: teacher._id, studentId: profile._id });
+      await Comments.create({
+        commenter: profile._id,
+        commentTo: teacher._id,
+        rating: 2,
+        comment: "Disposable review",
+      });
+      await api
+        .delete("/admin/accounts/" + account._id)
+        .set(auth(studentToken))
+        .expect(403);
+      await api
+        .delete("/admin/accounts/" + account._id)
+        .set(auth(adminToken))
+        .expect(200);
+      assert.equal(await User.findById(account._id), null);
+      assert.equal(await Student.findById(profile._id), null);
+      assert.equal(
+        await Comments.countDocuments({ commenter: profile._id }),
+        0,
+      );
+      assert.equal(await Waiting.countDocuments({ studentId: profile._id }), 0);
+      const reviews = await Comments.find({ commentTo: teacher._id });
+      const updated = await Teacher.findById(teacher._id);
+      assert.equal(updated.commentCount, reviews.length);
+      assert.equal(
+        updated.rate,
+        reviews.reduce((sum, review) => sum + review.rating, 0),
+      );
+    },
+  );
 });

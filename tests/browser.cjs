@@ -97,6 +97,7 @@ let browser, server, vite, uploads;
     const page = await browser.newPage({
       viewport: { width: 1440, height: 1000 },
     });
+    await page.addInitScript(() => localStorage.setItem("tutim-ui", "legacy"));
     const errors = [];
     page.on("pageerror", (error) => {
       errors.push(error.message);
@@ -349,7 +350,18 @@ let browser, server, vite, uploads;
       "No Google/Facebook requests should be made",
     );
     await expect(page.locator("iframe")).toHaveCount(0);
-    console.log("PASS mobile width and zero React runtime errors");
+    console.log("PASS legacy mobile width and zero React runtime errors");
+    await require("./modern-browser.cjs").runModernBrowser({
+      browser,
+      base,
+      root,
+      User,
+      Teacher,
+      Student,
+      Course,
+      teacher,
+      student,
+    });
   } catch (error) {
     if (browser) {
       const pages = browser.contexts().flatMap((c) => c.pages());

@@ -218,7 +218,7 @@ const HeaderHeaderComponent = React.forwardRef((props, ref) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [openModal, setOpenModal] = useState(false);
   const [modalSignUp, setModalSU] = useState(false);
-  const { profiles, SignInForm, SignUpForm } = props;
+  const { profiles, SignInForm, SignUpForm, onSwitchUI } = props;
   const [username, setusername] = useState("");
   const [imgPath, setimgPath] = useState("");
   const [profileRoute, setprofileRoute] = useState("");
@@ -396,6 +396,13 @@ const HeaderHeaderComponent = React.forwardRef((props, ref) => {
               )}
             </>
           )}
+          <Button
+            onClick={onSwitchUI}
+            variant="outlined"
+            sx={{ ml: 1, flexShrink: 0, fontSize: { xs: 12, sm: 14 } }}
+          >
+            Modern UI
+          </Button>
         </Toolbar>
       </AppBar>
       <Modal

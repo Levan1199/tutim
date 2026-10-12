@@ -60,5 +60,14 @@
     "description",
     "available"
   ],
-  "centerAddress": "268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh"
+  "centerAddress": "268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh",
+  "days": [
+    { "value": 2, "label": "Monday" },
+    { "value": 3, "label": "Tuesday" },
+    { "value": 4, "label": "Wednesday" },
+    { "value": 5, "label": "Thursday" },
+    { "value": 6, "label": "Friday" },
+    { "value": 7, "label": "Saturday" },
+    { "value": 8, "label": "Sunday" }
+  ]
 }
