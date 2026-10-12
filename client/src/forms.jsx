@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { isDemo } from "./runtime.js";
 import {
   Grid,
   Paper,
@@ -307,6 +308,12 @@ const signInTextField = ({ field, form, type }) => {
 };
 function SignIn(props) {
   const classes = useSignInStyles();
+  if (isDemo)
+    return (
+      <Paper sx={{ p: 4, m: 4 }}>
+        Sign-in is disabled in this read-only demo.
+      </Paper>
+    );
   // const history = useNavigate();
 
   return (
@@ -434,6 +441,12 @@ const signUpTextField = ({ field, form, type }) => {
 };
 function SignUp(props) {
   const classes = useSignUpStyles();
+  if (isDemo)
+    return (
+      <Paper sx={{ p: 4, m: 4 }}>
+        Registration is disabled in this read-only demo.
+      </Paper>
+    );
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

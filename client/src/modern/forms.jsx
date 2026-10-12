@@ -34,6 +34,7 @@ import {
 } from "./store";
 import { avatar, courseImage, errorMessage } from "./utils";
 import { ImagePicker, PageTitle } from "./components";
+import { isDemo } from "../runtime.js";
 const credentials = z.object({
   username: z
     .string()
@@ -64,6 +65,19 @@ export function AuthPage({ signup = false }) {
     resolver: zodResolver(signup ? credentials : loginCredentials),
     defaultValues: { username: "", password: "" },
   });
+  if (isDemo)
+    return (
+      <Container maxWidth="sm" sx={{ py: 6 }}>
+        <Alert severity="info">
+          This is a read-only demo. Accounts, registration, and saving changes
+          are disabled. You can browse all fictional teachers, students, and
+          courses.
+        </Alert>
+        <Button component={RouterLink} to="/teachers" sx={{ mt: 2 }}>
+          Browse teachers
+        </Button>
+      </Container>
+    );
   return (
     <>
       <PageTitle

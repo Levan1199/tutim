@@ -1,5 +1,11 @@
 # TUTIM modernization and UI integration
 
+## Static demo for GitHub Pages
+
+`npm run build:pages` selects Vite's `demo` mode. Both interfaces use a shared, read-only adapter with fictional profiles and reviews. All account access and mutations are rejected locally before any network request. Hash routing supports direct links and refreshes under `/tutim/`; switching interfaces preserves equivalent routes and query filters.
+
+The Pages workflow publishes only `client/dist`. Course artwork is copied from an explicit list of bundled illustrations. No runtime profile uploads, environment files, server code, credentials, or database exports are deployed. Normal development and `npm run build` continue to use the existing API. Static browser tests start only a file server and verify both interfaces, filters, images, deep links, and the absence of API or external requests.
+
 ## Original modernization and recovery
 
 The first modernization retained the existing v1 pages, colors, text, route URLs, and images. Those screens remain available through the Legacy UI switch. UI widgets now use maintained components and some default spacing differs slightly from Material UI 4. The existing MongoDB collections and account password hashes are retained. V2 source was not edited.

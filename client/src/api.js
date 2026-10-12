@@ -1,8 +1,20 @@
+import { isDemo, publicAsset } from "./runtime.js";
+
 export const baseUrl = "/api/";
 export async function apiRequest(
   path,
   { method = "GET", body, token = localStorage.getItem("token") } = {},
 ) {
+  if (isDemo) {
+    const { demoRequest, demoCourses } = await import("./demoData.js");
+    const data = demoRequest(path, { method });
+    const courses = Array.isArray(data) ? data : [data];
+    for (const item of courses) {
+      if (item && demoCourses.some((course) => course._id === item._id))
+        item.imgPath = publicAsset("demo/coursesImg/" + item.imgPath);
+    }
+    return data;
+  }
   const headers = {};
   if (token) headers.Authorization = `Bearer ${token}`;
   if (body !== undefined && !(body instanceof FormData)) {

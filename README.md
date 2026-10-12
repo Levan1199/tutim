@@ -1,6 +1,40 @@
 # TUTIM: modern and legacy interfaces
 
-The redesigned interface from `tutor_information_management_v2` is integrated here, alongside the original UI. Both interfaces use one backend, the same accounts, and the existing `tutim` database.
+The redesigned interface from `tutor_information_management_v2` is integrated here, alongside the original UI. The normal local build uses one backend, the same accounts, and the existing `tutim` database. A separate demo build runs entirely in the browser for GitHub Pages.
+
+## GitHub Pages: frontend-only demo
+
+The Pages build contains 12 fictional teachers, 6 fictional students, 11 courses, and example reviews. Both interfaces support browsing, filters, search, course/profile details, and remembered UI switching. No API or database is started or contacted. Sign-in, registration, editing, reviews, and connections are disabled in this read-only demo. The demo's sample data is public; never replace it with real personal records or credentials.
+
+To publish:
+
+1. Commit and push the changes to `main`.
+2. In GitHub, open **Settings → Pages → Build and deployment → Source**, and select **GitHub Actions**. If Pages requires a public repository on your plan, review its contents before changing visibility.
+3. In **Actions**, run **Deploy frontend demo to GitHub Pages** (or push another commit to `main`).
+4. Open `https://levan1199.github.io/tutim/` after the workflow succeeds.
+
+The workflow `.github/workflows/pages.yml` uses Node 24, builds and tests the demo, and publishes only `client/dist`. It does not need database passwords, a JWT secret, cloud hosting, or Docker. Backend source remains available in the repository but is not deployed. The repository name determines the deployed base path.
+
+To preview with Node 24:
+
+```powershell
+npm ci
+npm run build:pages
+npm run preview:pages
+# Open http://localhost:3001/tutim/
+```
+
+To preview with Docker Desktop, without starting the backend or MongoDB:
+
+```powershell
+docker run --rm -it -p 127.0.0.1:3001:3001 `
+  --mount "type=bind,source=$($PWD.Path),target=/app" `
+  --mount "type=volume,source=tutim-pages-modules,target=/app/node_modules" `
+  -w /app node:24-bookworm-slim `
+  sh -c "npm ci && npm run build:pages && npm run preview:pages"
+```
+
+Routes use hashes (for example `/tutim/#/teachers`) so copied links and refreshes work on Pages. `npm run build` still creates the normal frontend for your backend; `npm run build:pages` explicitly selects the read-only demo. Both write `client/dist`, so rebuild the desired version before previewing it. Use `npm run test:pages` after the demo build to test the static site without any backend or database.
 
 ## Switch interfaces
 
@@ -17,6 +51,9 @@ client/src/
   LegacyApp.jsx   Original navigation, routes, access guards
   modern/         Imported v2 pages, components, forms and theme
   api.js          Shared authenticated requests
+  runtime.js      Demo/build paths and browser location helpers
+  AppRouter.jsx   Browser routes locally, hash routes on Pages
+  demoData.js     Fictional data and read-only demo requests
   uiPreference.js Saved UI preference and equivalent page URLs
   pages.jsx       Website pages (including AdminPage)
   components.jsx  Shared UI, theme, widgets

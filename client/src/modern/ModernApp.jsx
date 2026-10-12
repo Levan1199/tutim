@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import AppRouter from "../AppRouter.jsx";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { theme } from "./theme.js";
 import { createStore } from "./store.js";
@@ -12,13 +12,13 @@ export default function ModernApp({ onSwitchUI }) {
   const [store] = useState(createStore);
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <AppRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <InterfaceStyles mode="modern" css={styles} />
           <App onSwitchUI={onSwitchUI} />
         </ThemeProvider>
-      </BrowserRouter>
+      </AppRouter>
     </Provider>
   );
 }
