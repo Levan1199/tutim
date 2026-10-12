@@ -33,6 +33,7 @@ import {
   useSession,
 } from "./store";
 import { AuthPage } from "./forms";
+import { isDemo } from "../runtime.js";
 import {
   AdminPage,
   ConnectionsPage,
@@ -103,7 +104,18 @@ export default function App({ onSwitchUI }) {
   };
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <a className="skip-link" href="#main-content">
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={(event) => {
+          if (isDemo) {
+            event.preventDefault();
+            const main = document.getElementById("main-content");
+            main?.scrollIntoView();
+            main?.focus();
+          }
+        }}
+      >
         Skip to content
       </a>
       <AppBar
@@ -174,7 +186,12 @@ export default function App({ onSwitchUI }) {
                 </Button>
               </Stack>
             ) : (
-              <Button component={RouterLink} to="/signin" variant="contained">
+              <Button
+                component={RouterLink}
+                to="/signin"
+                variant="contained"
+                disabled={isDemo}
+              >
                 Sign in
               </Button>
             )}

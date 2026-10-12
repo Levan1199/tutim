@@ -1,8 +1,38 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { readFileSync } from "node:fs";
+import { demoCourses } from "./src/demoData.js";
 const backend = process.env.API_PROXY_TARGET || "http://localhost:3000";
-export default defineConfig({
-  plugins: [react()],
+export default defineConfig(({ mode }) => ({
+  base: mode === "demo" ? process.env.PAGES_BASE_PATH || "/tutim/" : "/",
+  plugins: [
+    react(),
+    ...(mode === "demo"
+      ? [
+          {
+            name: "demo-course-artwork",
+            generateBundle() {
+              // Copy only bundled illustrations, never runtime uploads or secrets.
+              for (const imgPath of [
+                ...demoCourses.map((course) => course.imgPath),
+                "header.jpg",
+              ]) {
+                this.emitFile({
+                  type: "asset",
+                  fileName: "demo/coursesImg/" + imgPath,
+                  source: readFileSync(
+                    new URL(
+                      "../server/public/coursesImg/" + imgPath,
+                      import.meta.url,
+                    ),
+                  ),
+                });
+              }
+            },
+          },
+        ]
+      : []),
+  ],
   build: {
     rolldownOptions: {
       output: {
@@ -49,4 +79,4 @@ export default defineConfig({
       ),
     },
   },
-});
+}));

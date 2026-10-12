@@ -1,3 +1,5 @@
+import { isDemo } from "../runtime.js";
+
 export function matchesFilters(profile, filters) {
   return ["district", "grade", "subject"].every((key) =>
     (filters[key] || []).every((value) => (profile[key] || []).includes(value)),
@@ -20,6 +22,6 @@ export const money = (value) =>
     maximumFractionDigits: 0,
   }).format(value || 0);
 export const avatar = (profile) =>
-  profile?.imgPath ? "/images/" + profile.imgPath : undefined;
+  profile?.imgPath ? (isDemo ? "" : "/images/") + profile.imgPath : undefined;
 export const courseImage = (course) =>
-  course?.imgPath ? "/coursesImg/" + course.imgPath : undefined;
+  course?.imgPath ? (isDemo ? "" : "/coursesImg/") + course.imgPath : undefined;

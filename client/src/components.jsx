@@ -2,6 +2,7 @@ import { css } from "@emotion/css";
 import { useTheme, createTheme } from "@mui/material/styles";
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { isDemo } from "./runtime.js";
 import {
   Container,
   Grid,
@@ -313,7 +314,10 @@ const HeaderHeaderComponent = React.forwardRef((props, ref) => {
                   );
                 })}
                 {!props.auth.isAuthenticated ? (
-                  <MenuItem onClick={() => setOpenModal(true)}>
+                  <MenuItem
+                    onClick={() => setOpenModal(true)}
+                    disabled={isDemo}
+                  >
                     Sign In
                     {props.auth.isFetching ? (
                       <span className="fa fa-spinner fa-pulse fa-fw"></span>
@@ -355,6 +359,7 @@ const HeaderHeaderComponent = React.forwardRef((props, ref) => {
                 <Button
                   variant="contained"
                   onClick={() => setOpenModal(true)}
+                  disabled={isDemo}
                   color="secondary"
                   className={classes.navButton}
                 >

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { isDemo } from "./runtime.js";
 import {
   courseUrl,
+  courseHeaderUrl,
   fetchCourseInfo,
   avatarUrl,
   homeUrl,
@@ -223,7 +225,7 @@ const useHomePageStyles = createStyles((theme) => ({
     justifyContent: "center",
     width: "100%",
     height: "100vh",
-    backgroundImage: `url(${courseUrl}/header.jpg)`,
+    backgroundImage: `url(${courseHeaderUrl})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
   },
@@ -1304,6 +1306,7 @@ function StudentDirectoryRenderStudentCard({
                   teacherId,
                 )
               }
+              disabled={isDemo}
             >
               Register
             </Button>
@@ -1782,6 +1785,7 @@ const TeacherDirectoryRenderTeacherCard = ({
                   studentId,
                 )
               }
+              disabled={isDemo}
             >
               Register
             </Button>
@@ -2075,7 +2079,7 @@ const useConnectionListStyles = createStyles((theme) => ({
     justifyContent: "center",
     width: "100%",
     height: "100vh",
-    backgroundImage: `url(${courseUrl}/header.jpg)`,
+    backgroundImage: `url(${courseHeaderUrl})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
   },
@@ -2874,6 +2878,7 @@ const PublicStudentProfileRenderUI = (props) => {
                     teacherId,
                   )
                 }
+                disabled={isDemo}
               >
                 Connect
               </Button>
@@ -3175,6 +3180,7 @@ const PublicTeacherProfileRenderUI = (props) => {
                     studentId,
                   )
                 }
+                disabled={isDemo}
               >
                 Connect
               </Button>
@@ -3302,6 +3308,7 @@ const PublicTeacherProfileRenderUI = (props) => {
           <Grid size={{ xs: 2 }}>
             <Button
               onClick={handleComment}
+              disabled={isDemo}
               color="secondary"
               variant="contained"
             >

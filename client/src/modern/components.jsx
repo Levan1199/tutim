@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { isDemo } from "../runtime.js";
 import {
   Alert,
   Autocomplete,
@@ -183,6 +184,12 @@ export function ConnectionButton({ profile, kind }) {
   const connections = useGetConnectionsQuery(undefined, { skip: !user });
   const [connect, { isLoading }] = useConnectMutation();
   const [error, setError] = useState("");
+  if (isDemo)
+    return (
+      <Button variant="outlined" disabled>
+        Connections disabled in demo
+      </Button>
+    );
   if (!user)
     return (
       <Button component={RouterLink} to="/signin" variant="outlined">

@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import {
-  BrowserRouter,
   Routes,
   Route,
   Navigate,
@@ -21,6 +20,7 @@ import { ConfigureStore, fetchProfile } from "./store.js";
 import { Header, Footer, theme } from "./components.jsx";
 import { apiRequest } from "./api.js";
 import { routeForInterface } from "./uiPreference.js";
+import AppRouter from "./AppRouter.jsx";
 
 const page = (name) =>
   lazy(() => import("./pages.jsx").then((pages) => ({ default: pages[name] })));
@@ -152,7 +152,7 @@ export default function LegacyApp({ onSwitchUI }) {
   const [store] = useState(ConfigureStore);
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <AppRouter>
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={theme}>
             <InterfaceStyles
@@ -164,7 +164,7 @@ export default function LegacyApp({ onSwitchUI }) {
             <Navigation onSwitchUI={onSwitchUI} />
           </ThemeProvider>
         </StyledEngineProvider>
-      </BrowserRouter>
+      </AppRouter>
     </Provider>
   );
 }

@@ -10,10 +10,14 @@ export const teachInit = { ...stuInit };
 
 // API paths and requests
 import { apiRequest, imageForm } from "./api.js";
+import { isDemo, publicAsset } from "./runtime.js";
 export { apiRequest, imageForm, baseUrl } from "./api.js";
-export const avatarUrl = "/images/";
-export const courseUrl = "/coursesImg/";
-export const homeUrl = "/homeImg/";
+export const avatarUrl = isDemo ? "" : "/images/";
+export const courseUrl = isDemo ? "" : "/coursesImg/";
+export const courseHeaderUrl = isDemo
+  ? publicAsset("demo/coursesImg/header.jpg")
+  : courseUrl + "header.jpg";
+export const homeUrl = isDemo ? publicAsset("assets/images/") : "/homeImg/";
 
 // Session and profile state
 
